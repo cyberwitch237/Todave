@@ -11,13 +11,15 @@ class app: #each page of the app is a function under this class
     
     def MainMenu(self):
         for i in self.master.winfo_children():
-            i.destroy()
+            i.destroy() 
 
         self.ModulesButton = ttk.Button(self.master, text='Create Modules', width=20, command=self.CreateModules)
         self.GenTimeables = ttk.Button(self.master, text='Generate Timetable', width=20)
 
-        self.ModulesButton.grid(row=0, column=0, padx=5, pady=5)
-        self.GenTimeables.grid(row=1, column=0, padx=5, pady=5)
+        self.ModulesButton.grid(row=0, column=0, padx=15, pady=15)
+        self.GenTimeables.grid(row=1, column=0, padx=15, pady=15)
+
+        root.columnconfigure(0, weight=1)
     
     def CreateModules(self):
         for i in self.master.winfo_children():
@@ -25,6 +27,7 @@ class app: #each page of the app is a function under this class
 
 root = Tk()
 app(root)
+root.minsize(600, 600)
 
 sv_ttk.set_theme("dark")
 
