@@ -50,8 +50,6 @@ class app: #each page of the app is a function under this class
     # Go to timetables page
     def GenerateTimetables(self) -> None:
         self._NewPage(self.GenerateTimetables)
-
-        self._NewPage(self.CreateModules)
         
         # Generate the timetable
         
