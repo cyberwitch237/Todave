@@ -120,7 +120,6 @@ class app: #each page of the app is a function under this class
         self._ClearAll()
         self._CreateBackButton()
         self.PageStack.append(func)
-        print("appended")
         print(len(self.PageStack))
     
     # Go to main menu
