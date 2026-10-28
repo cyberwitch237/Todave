@@ -33,15 +33,21 @@ class app: #each page of the app is a function under this class
         self._ClearAll()
 
         # Create option butttons
+        self.SubjectsButton = ttk.Button(self.master, text = 'Create Subjects', width=20, command = self.CreateSubjects)
         self.ModulesButton = ttk.Button(self.master, text = 'Create Modules', width=20, command = self.CreateModules)
         self.GenTimeables = ttk.Button(self.master, text = 'Generate Timetables', width=20, command = self.GenerateTimetables)
 
         # Position option buttons
-        self.ModulesButton.grid(row=0, column=0, padx=15, pady=15)
-        self.GenTimeables.grid(row=1, column=0, padx=15, pady=15)
+        self.SubjectsButton.grid(row=0, column = 0, padx=15, pady=15)
+        self.ModulesButton.grid(row=1, column=0, padx=15, pady=15)
+        self.GenTimeables.grid(row=2, column=0, padx=15, pady=15)
 
         # Configure column
         root.columnconfigure(0, weight=1)
+
+    # Go to subjects page
+    def CreateSubjects(self) -> None:
+        self._NewPage(self.CreateSubjects)
     
     # Go to modules page
     def CreateModules(self) -> None:
