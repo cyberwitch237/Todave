@@ -75,6 +75,7 @@ class app: #each page of the app is a function under this class
 # Initialise window
 root = Tk()
 app(root)
+root.title("Todave")
 root.minsize(600, 600)
 
 sv_ttk.set_theme("dark")
