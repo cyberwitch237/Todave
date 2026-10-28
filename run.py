@@ -3,100 +3,6 @@ from tkinter import ttk
 
 import sv_ttk #changes tkinter to look like windows 11, pip install sv-ttk
 
-def RetrieveModuleData() -> None: #temporary, currently takes from txt files, can be replaced with sql stuff later. #for generating timetables
-
-    print("Getting Module Data")
-
-    global ModuleName
-    global ModuleCode
-    global LeadStaff
-    global LectureLength
-    global TutorialLength
-    global LectureAmount
-    global TutorialAmount
-    global Optional
-    global Monday
-    global Tuesday
-    global Wednesday
-    global Thursday
-    global Friday
-
-    with open("Cashe/SharedFiles/ModuleNames.txt", 'r') as file:
-        ModuleName = file.read().splitlines()
-
-    with open("Cashe/SharedFiles/ModuleCodes.txt", 'r') as file:
-        ModuleCode = file.read().splitlines()
-
-    with open("Cashe/SharedFiles/LeadStaff.txt", 'r') as file:
-        LeadStaff = file.read().splitlines()
-
-    with open("Cashe/SharedFiles/LectureLength.txt", 'r') as file:
-        LectureLength = file.read().splitlines()
-
-    with open("Cashe/SharedFiles/TutorialLength.txt", 'r') as file:
-        TutorialLength = file.read().splitlines()
-
-    with open("Cashe/SharedFiles/LectureAmount.txt", 'r') as file:
-        LectureAmount = file.read().splitlines()
-
-    with open("Cashe/SharedFiles/TutorialAmount.txt", 'r') as file:
-        TutorialAmount = file.read().splitlines()
-
-    with open("Cashe/SharedFiles/Optional.txt", 'r') as file:
-        Optional = file.read().splitlines()
-    
-    with open("Cashe/SharedFiles/Monday.txt", 'r') as file:
-        Monday = file.read().splitlines()
-
-    with open("Cashe/SharedFiles/Tuesday.txt", 'r') as file:
-        Tuesday = file.read().splitlines()
-
-    with open("Cashe/SharedFiles/Wednesday.txt", 'r') as file:
-        Wednesday = file.read().splitlines()
-
-    with open("Cashe/SharedFiles/Thursday.txt", 'r') as file:
-        Thursday = file.read().splitlines()
-
-    with open("Cashe/SharedFiles/Friday.txt", 'r') as file:
-        Friday = file.read().splitlines()
-
-    print(ModuleName)
-    print(ModuleCode)
-    print(LeadStaff)
-    print(LectureLength)
-    print(TutorialLength)
-    print(LectureAmount)
-    print(TutorialAmount)
-    print(Optional)
-    print(Monday)
-    print(Tuesday)
-    print(Wednesday)
-    print(Thursday)
-    print(Friday)
-
-
-    global NumberOfModules
-    NumberOfModules = len(ModuleCode)
-
-    print(str(NumberOfModules) + " Modules")
-
-def Optimist() -> None:
-    CurrentModule = 0
-
-    for i in range (NumberOfModules): 
-        print("test")
-
-        if Monday[CurrentModule] == 'True':
-            print("Monday is true")
-
-        CurrentModule = CurrentModule + 1
-
-
-def CreateTimetable() -> None:
-
-    RetrieveModuleData()
-
-    Optimist()
 
 class app: #each page of the app is a function under this class
     
@@ -146,12 +52,76 @@ class app: #each page of the app is a function under this class
     # Go to timetables page
     def GenerateTimetables(self) -> None:
         self._NewPage(self.GenerateTimetables)
+
+        # Get info From database // THIS CURRENTLY IS A TEMP MATRIX TO STORE VALUES, LATER MATRIX VALUES SHOULD BE DEPENDANT ON DATABASE
+        def GetModuleData():
+            global ModuleData
+            global InstructorAvalibilities
+
+            #Module Data = Module1, Module2, Module3, ..., Modulen
+            #Modulen = Name, Code, Instructor(name and number), LectureInfo(list), PracticalInfo(list), TutorialInfo(list),
+            #Lect/Pract/Tutinfo = Amount, Length
+
+            #InstructorAvalibility = instructor1, instructor2, ..., instructorn
+            #Instructorn = Monday, Tuesay, ..., Friday 
+            #Days of the week = 9 - 10, 10 - 11, ..., 17 - 18 (im assuming the earliest a lecture can start is 09:00, latest a module can end is 18:00)
+
+
+            ModuleData = [['Problem Solving and Computer Programming', 'CSC-10084', ['Bappaditya Mandal', 0], [1,2], [1,2], [0,0], ]] 
+            InstructorAvalibilities = [[[True, True, True, True, True, True, True, True, False], [True, True, True, True, True, True, True, True, False], [True, True, True, True, True, True, True, True, False], [True, True, True, True, True, True, True, True, False], [True, True, True, True, True, True, True, True, False]]]
         
         # Generate the timetable
-        self.Testbutton = ttk.Button(self.master, text = 'Testbutton', width=20, command = CreateTimetable)
-        self.Testbutton.pack()
-        
+
+        GetModuleData()
+
+        def Optimist(MODULEDATA, USERINPUT):
+
+            global ModuleOutput
+            global InstructorAvalibilities
+            ModuleOutput = []
+
+            #Timtable Output = Module1, Module2, Module3 ,..., Modulen
+            #Modulen = Name, Code, Instructor, LectureInfo, PracticalInfo, TutorialInfo, 
+            #Lect/pract/tutInfo = Lecture1, Lecture2
+            #Lect/pract/tutn = Day, Hour(s)
+
+            for i in range(len(MODULEDATA)): #Create Every Module Output
+                NewModule = []
+                NewModule.append(ModuleData[i][0])
+                NewModule.append(ModuleData[i][1])
+                NewModule.append(ModuleData[i][2][0])
+
+                lecturelength = ModuleData[i][3][1]
+                InstructorNumnber = ModuleData[i][2][1]
+                for i in range(ModuleData[i][3][0]): #Create Every Lecture for the Module
+                    day = 0
+                    time = USERINPUT[0] - 9
+                    DayCheckingList = InstructorAvalibilities[InstructorNumnber][day]
+                    print(DayCheckingList)
+
+                    while all(DayCheckingList[time:(time + lecturelength - 1)]) == False: # check if there is a slot avalible for lecture on current day
+                        print('idfk')
+
+                    print(day)
+                    print(time)
+
+                ModuleOutput.append(NewModule)
+
+            print(ModuleOutput)
+
+
         # Show info on the generated timetable
+
+
+        # User interface
+        TimetableUserInputs = [11]
+
+        #GenerateUserInputs = Best start time, 
+
+        
+
+        self.Optimistsort = ttk.Button(self.master, text = 'Optimist', width=40, command=lambda : Optimist(ModuleData, TimetableUserInputs))
+        self.Optimistsort.pack()
     
     def GoBack(self) -> None:
         self.PageStack.pop()
